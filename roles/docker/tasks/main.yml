@@ -1,0 +1,50 @@
+---
+
+
+- name: update repositories
+  apt:
+    update_cache: yes
+  tags: update_repo
+
+
+- name: upgrade packages
+  apt:
+    upgrade: yes
+  tags: upgrade_packages
+
+- name: install package befor install docker
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - ca-certificates
+    - curl
+    - gnupg
+  tags: pre_install
+
+
+- name: Download and install Docker's GPG key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add Docker Repository
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu focal stable
+    state: present
+
+- name: Update Apt package lists
+  apt:
+    update_cache: yes
+
+- name: install docker
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+    - docker-buildx-plugin
+    - docker-compose-plugin  
+

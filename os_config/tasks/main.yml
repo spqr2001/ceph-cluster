@@ -1,0 +1,31 @@
+---
+
+- name: remove resolve.conf
+  file:
+    path: /etc/resolv.conf
+    state: absent
+  tags: dns
+
+- name: add resolv.conf
+  copy:
+    src: files/resolv.conf
+    dest: /etc/
+  tags: dns
+
+
+- name: Update apt cache
+  apt:
+    update_cache: yes
+    force_apt_get: yes
+  tags: update
+
+- name: Upgrade OS
+  apt:
+    upgrade: yes
+  tags: upgrade
+
+- name: set timezon Asia/Tehran
+  timezone:
+    name: Asia/Tehran
+  tags: timezon
+
