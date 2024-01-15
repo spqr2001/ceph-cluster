@@ -1,7 +1,6 @@
 #!/bin/bash
 
 
-git clone https://github.com/HMoradiRad/ceph-cluster.git
 
 cd ceph-cluster
 terraform init
