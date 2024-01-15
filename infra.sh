@@ -2,7 +2,6 @@
 
 
 
-cd ceph-cluster
 terraform init
 terraform apply -auto-approve
 echo "go to ceph1 ssh ro other server"
