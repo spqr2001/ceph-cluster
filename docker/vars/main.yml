@@ -1,3 +1,0 @@
-docker_gpg_url: https://download.docker.com/linux/ubuntu/gpg
-docker_repository: deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable
-
