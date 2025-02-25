@@ -1,33 +1,15 @@
 ---
 
-- name: Download cephadm script
-  get_url:
-    url: "https://download.ceph.com/rpm-18.2.0/el9/noarch/cephadm"
-    dest: "/root"
-
-- name: Changing perm of "/root/cephadm", adding "+x"
-  file: dest="/root/cephadm" mode=a+x
-
 - name: Add Ceph repository
   command: >
-    /root/cephadm add-repo --release reef
+    cephadm add-repo --release |stable-release|  
 
 - name: Update Repository
   apt:
     update_cache: yes
-  
 
 - name: Install Ceph
-  command: /root/cephadm install
-
-- name: remove cephadm binary
-  command: rm -rf /root/cephadm
-
-
-- name: Include encrypted variables
-  include_vars:
-    file: vars/secret.yml
-    name: secret
+  command: cephadm install
 
 - name: Set fact for mon_ip
   set_fact:
@@ -35,10 +17,9 @@
 
 
 - name: Bootstrap Ceph cluster using cephadm
-  command: "cephadm bootstrap --mon-ip {{ mon_ip }} --initial-dashboard-user {{ secret['vault-server-username'] }} --initial-dashboard-password {{ secret['vault-server-password'] }} --allow-overwrite"
+  command: "cephadm bootstrap --mon-ip {{ mon_ip }} --initial-dashboard-user {{ hal9000 }} --initial-dashboard-password {{ global2007 }} --allow-overwrite"
   register: ceph_bootstrap_result
-  when: ansible_hostname == "ceph1"
-
+  when: ansible_hostname == "ceph00"
 
 - name: Generate SSH key pair
   openssh_keypair:
@@ -50,11 +31,10 @@
     responses:
       "password": "{{ secret['vm'] }}"
   loop:
-    - 172.31.112.118
-    - 172.31.112.119
+    - ceph01 
+    - ceph02 
 
-  when: "'{{ inventory_hostname }}' == 'ceph1'"
-
+  when: "'{{ inventory_hostname }}' == 'ceph00'"
 
 
 - name: Copy ceph.pub
@@ -63,14 +43,13 @@
     responses:
       "password": "{{ secret['vm'] }}"
   loop:
-    - 172.31.112.118
-    - 172.31.112.119
+    - ceph01
+    - ceph02
 
-  when: "'{{ inventory_hostname }}' == 'ceph1'"
+  when: "'{{ inventory_hostname }}' == 'ceph00'"
 
 - name: install ceph-common
   command: cephadm install ceph-common
-
 
 
     #- name: adding host to cluster

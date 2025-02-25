@@ -12,7 +12,6 @@
     dest: /etc/
   tags: dns
 
-
 - name: Update apt cache
   apt:
     update_cache: yes
@@ -24,8 +23,8 @@
     upgrade: yes
   tags: upgrade
 
-- name: set timezon Asia/Tehran
+- name: set timezone Europe/Berlin
   timezone:
-    name: Asia/Tehran
-  tags: timezon
+    name: Europe/Berlin 
+  tags: timezone
 

@@ -1,6 +1,5 @@
 ---
 
-
 - name: update repositories
   apt:
     update_cache: yes
@@ -47,4 +46,5 @@
     - containerd.io
     - docker-buildx-plugin
     - docker-compose-plugin  
+    - cephadm
 
